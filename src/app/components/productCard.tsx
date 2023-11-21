@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { favoriteitem, product } from '../types';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image'
 
 export default function ProductCard(prop: product) {
   const [favoriteItems, setFavoriteItems] = useState<favoriteitem[]>([])
@@ -140,7 +141,7 @@ export default function ProductCard(prop: product) {
 
   return (
     <div className="min-w-[250px] border rounded-md overflow-hidden bg-white shadow-lg transform hover:scale-105 transition-transform duration-300">
-      <img onClick={toSlug} src={prop.image} alt={prop.title} className="w-full h-48 object-contain" />
+      <Image onClick={toSlug} src={prop.image} alt={prop.title} className="w-full h-48 object-contain" />
       <div className="p-4">
         <div className="h-24 overflow-hidden">
           <h2 className="text-lg font-semibold mb-2">{prop.title}</h2>

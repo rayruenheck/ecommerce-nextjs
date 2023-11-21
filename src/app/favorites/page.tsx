@@ -7,7 +7,15 @@ import LoginLogout from '../components/login-logout';
 
 export default function FavoritesPage() {
     const [favoriteItems, setFavoriteItems] = useState<favoriteitem[]>([]);
-    const userToken = localStorage.getItem('usertoken');
+    const userToken = getUserToken();
+
+    function getUserToken() {      
+      if (typeof window !== 'undefined') {
+        
+        return localStorage.getItem('usertoken') || ''
+      }      
+        ;
+      } 
   
     const getFavoriteItems = async () => {
       try {
@@ -54,7 +62,7 @@ export default function FavoritesPage() {
                 )
               ) : (
                 <div className='text-xl text-gray-600 text-center'>
-                  You haven't added any items to your favorites yet.
+                  You have not added any items to your favorites yet.
                 </div>
               )}
             </div>

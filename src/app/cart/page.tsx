@@ -7,7 +7,17 @@ import LoginLogout from '../components/login-logout';
 
 export default function CartPage() {
   const [cartItems, setCartItems] = useState<cartitem[]>([]);
-  const userToken = localStorage.getItem('usertoken');
+  const userToken = getUserToken();
+
+  function getUserToken() {      
+    if (typeof window !== 'undefined') {
+      
+      return localStorage.getItem('usertoken') || ''
+    }      
+      ;
+    } 
+
+  
   
 
   const getCartItems = async () => {
@@ -62,6 +72,7 @@ export default function CartPage() {
           <div className='grid grid-cols-1 md:grid-cols-3 gap-8'>
             <div className='col-span-2 space-y-4'>
               {cartItems.map((product) => (
+                
                 product.usertoken === userToken ? (
                   <CartItem key={product.id} cart={product} updateCartItem={updateCartItems}/>
                 ) : null

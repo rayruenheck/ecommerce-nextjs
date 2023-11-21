@@ -2,6 +2,7 @@
 import LoginLogout from '@/app/components/login-logout';
 import Navbar from '@/app/components/navbar';
 import { favoriteitem, product } from '@/app/types';
+import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
@@ -163,7 +164,7 @@ export default function Page() {
           {product ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div>
-                <img
+                <Image
                   src={product.image}
                   alt={product.title}
                   className="w-full h-auto rounded-lg shadow-md"

@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { cartable, cartitem } from '../types';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 export default function CartItem({ cart, updateCartItem}: cartable) {
   const router = useRouter()
@@ -93,7 +94,7 @@ export default function CartItem({ cart, updateCartItem}: cartable) {
   return (
     <div className="border-t-2 flex flex-col sm:flex-row items-center p-4 sm:p-6 md:w-3/4 mx-auto">
       <div onClick={toSlug} className="mb-4 sm:mr-4 sm:mb-0">
-        <img
+        <Image
           src={cart.image}
           alt={cart.product_name}
           className="border-2 w-full h-32 sm:h-40 md:h-48 lg:h-56 xl:h-64 object-cover"
