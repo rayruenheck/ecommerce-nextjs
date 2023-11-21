@@ -15,7 +15,7 @@ export default function FavoriteItem({ favorite, updateFavoriteItem }: favoritea
   
     return (
         <div className="min-w-[250px] border rounded-md overflow-hidden bg-white shadow-lg transform hover:scale-105 transition-transform duration-300">
-          <Image onClick={toSlug} src={favorite.image} alt={favorite.product_name} className="w-full h-48 object-contain" />
+          <img onClick={toSlug} src={favorite.image} alt={favorite.product_name} className="w-full h-48 object-contain" />
           <div className="p-4">
             <div className="h-24 overflow-hidden">
               <h2 className="text-lg font-semibold mb-2">{favorite.product_name}</h2>
