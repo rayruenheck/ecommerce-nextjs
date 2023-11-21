@@ -1,45 +1,130 @@
 'use client'
-import React from 'react'
-import { cartable, cartitem } from '../types'
+import React, { useState } from 'react';
+import { cartable, cartitem } from '../types';
+import { useRouter } from 'next/navigation';
 
-export default function CartItem({cart, updateCartItem}:cartable) {
-  
+export default function CartItem({ cart, updateCartItem}: cartable) {
+  const router = useRouter()
+  const [Quantity, setQuantity] = useState(cart.quantity)
+    
+
+  const handleAddQuantity = async () => {
+    const cartItem = {
+      
+      image: cart.image,
+      product_category: cart.product_category,
+      usertoken: localStorage.getItem('usertoken'),
+      product_name: cart.product_name,
+      product_id: cart.id,
+      price: cart.price,
+      quantity: Quantity + 1,
+    }
+
+    const response = await fetch('https://raysflaskeccomerce.onrender.com/add-item-quantity', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(cartItem),
+        });
+        if( response.status == 200){
+          const data = await response.json()
+          setQuantity(data.quantity)
+          
+          
+          
+        }
+      }
+      const handleSubtractQuantity = async () => {
+        if (Quantity > 1) {
+          const cartItem = {
+            image: cart.image,
+            product_category: cart.product_category,
+            usertoken: localStorage.getItem('usertoken'),
+            product_name: cart.product_name,
+            product_id: cart.id,
+            price: cart.price,
+            quantity: Quantity - 1,
+            
+          };
+      
+          const response = await fetch('https://raysflaskeccomerce.onrender.com/remove-item-quantity', {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(cartItem),
+          });
+      
+          if (response.status === 200) {
+            const data = await response.json();
+            setQuantity(data.quantity);
+            
+            
+          }
+        }
+      }
+      
+
+      const toSlug = () => {
+        router.push(`/${cart.product_name}/${cart.product_id}`)
+      }
+    
   const deleteCartItems = async () => {
     try {
-        const response = await fetch(`http://127.0.0.1:5000/get-cart-items/${cart.id}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-        
+      const response = await fetch(`https://raysflaskeccomerce.onrender.com/get-cart-items/${cart.id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
 
-        if (response.ok) {
-            console.log('item deleted')
-            updateCartItem(cart.id)
-        } else {
-            console.error('Failed to fetch cart items');
-        }
+      if (response.ok) {
+        console.log('Item deleted');
+        updateCartItem(cart.id);
+      } else {
+        console.error('Failed to fetch cart items');
+      }
     } catch (error) {
-        console.error('An error occurred:', error);
+      console.error('An error occurred:', error);
     }
-} 
+  };
 
   return (
-
-    <div className=' border-t-2 grid-row-2 flex h-[200px] w-1/2'>
-        <div className=' row-span-1 flex w-1/2 items-center '>
-            <img src={cart.image} alt={cart.product_name} className="border-2 w-[150px] h-[150px] mr-[20px]" />
-            <div className='flex flex-col w-full'>
-                <div>{cart.product_name}</div>
-                <div>{cart.product_category}</div>
-                <div>Quantity {cart.quantity}</div>
-            </div>
+    <div className="border-t-2 flex flex-col sm:flex-row items-center p-4 sm:p-6 md:w-3/4 mx-auto">
+      <div onClick={toSlug} className="mb-4 sm:mr-4 sm:mb-0">
+        <img
+          src={cart.image}
+          alt={cart.product_name}
+          className="border-2 w-full h-32 sm:h-40 md:h-48 lg:h-56 xl:h-64 object-cover"
+        />
+      </div>
+      <div className="flex-1 flex flex-col">
+        <div className="font-bold text-lg sm:text-xl md:text-lg lg:text-xl xl:text-2xl mb-2">{cart.product_name}</div>
+        <div className="text-sm mb-2">{cart.product_category}</div>
+        
+        <div className="text-sm mb-2">Quantity: <button onClick={handleSubtractQuantity}>-</button> {Quantity}  <button onClick={handleAddQuantity}>+</button></div>
+        
+        <div className="flex items-center justify-between">
+          <div className="text-lg font-bold">${cart.price}.00</div>
+          <svg
+            onClick={deleteCartItems}
+            width="24px"
+            height="24px"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            stroke="#000000"
+            strokeWidth="1.5"
+            className="cursor-pointer"
+          >
+            <path d="M6 6L18 18M6 18L18 6L6 18Z" stroke="#000000" strokeLinecap="round" strokeLinejoin="round"></path>
+          </svg>
         </div>
-        <div className='row-span-1 flex justify-end w-1/2'>
-            ${cart.price}.00
-        </div>
-        <svg onClick={deleteCartItems} width="64px" height="64px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#000000" strokeWidth="1.152"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round" stroke="#CCCCCC" strokeWidth="0.096"></g><g id="SVGRepo_iconCarrier"> <path d="M5 6.77273H9.2M19 6.77273H14.8M9.2 6.77273V5.5C9.2 4.94772 9.64772 4.5 10.2 4.5H13.8C14.3523 4.5 14.8 4.94772 14.8 5.5V6.77273M9.2 6.77273H14.8M6.4 8.59091V15.8636C6.4 17.5778 6.4 18.4349 6.94673 18.9675C7.49347 19.5 8.37342 19.5 10.1333 19.5H13.8667C15.6266 19.5 16.5065 19.5 17.0533 18.9675C17.6 18.4349 17.6 17.5778 17.6 15.8636V8.59091M9.2 10.4091V15.8636M12 10.4091V15.8636M14.8 10.4091V15.8636" stroke="#000000" strokeLinecap="round" strokeLinejoin="round"></path> </g></svg>
+      </div>
     </div>
-  )
+  );
 }
+
+
+

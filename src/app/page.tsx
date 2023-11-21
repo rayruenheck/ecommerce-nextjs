@@ -1,51 +1,44 @@
 'use client'
-import { handleLogout } from "./components/logout";
+
 import { useEffect, useState } from "react"
 import AllItems from "./components/allitems";
 import WomansClothing from "./components/womansclothing";
 import Navbar from "./components/navbar";
+import LoginLogout from "./components/login-logout";
 
 
 export default function Home() {
-  
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      
-      const usertoken = localStorage.getItem('usertoken');
-      setlogoutClassName(usertoken ? 'text-3x1' : 'hidden')
-      setloginclassName(usertoken ? 'hidden' : 'text-3x1')
-    }
-  }, [])
+  const [welcomeClassName, setWelcomeClassName] = useState('hidden');
+  const [username, setUsername] = useState('');
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      
       const usertoken = localStorage.getItem('usertoken');
-      const username = localStorage.getItem('username')
-      setUsername(username ? username : '')
-      setwelcomeClassName(usertoken ? 'text-3x1' : 'hidden')
+      const username = localStorage.getItem('username');
+      setUsername(username ? username : '');
+      setWelcomeClassName(usertoken ? 'block' : 'hidden');
     }
-  }, [])
+  }, []);
 
-  const [logoutclassName, setlogoutClassName] = useState('hidden')
-  const [loginclassName, setloginclassName] =useState('hidden')
-  const [welcomeclassName, setwelcomeClassName] = useState('hidden')
-  const [username, setUsername] = useState('')
   
-  
+
   return (
-    <main className="h-[100vh]">
-    <Navbar/>
+    <>
+    <LoginLogout/>
+    <main className="min-h-screen  p-4">
+      
+      <Navbar />
+
+      <div className={`text-3xl font-bold text-center mt-8 ${welcomeClassName}`}>
+        Welcome Back, {username.charAt(0).toUpperCase() + username.slice(1)}!
+      </div>
 
       
-      <div className={welcomeclassName}>Welcome Back {username.charAt(0).toUpperCase() + username.slice(1)}!</div>
-      <div>
-        <a onClick={handleLogout} href="" className={logoutclassName}>Logout</a>
-        <a  href="/login" className={loginclassName}>Login</a>
 
-      </div>
-      <div>home</div>
-      <AllItems/>
+      <div className="text-3xl font-bold mt-8 text-center">Discover Amazing Products</div>
+
+      <AllItems />
     </main>
-  )
+    </>
+  );
 }

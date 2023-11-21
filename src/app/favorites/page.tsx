@@ -3,52 +3,63 @@ import React, { useEffect, useState } from 'react'
 import {favoriteitem } from '../types';
 import Navbar from '../components/navbar';
 import FavoriteItem from '../components/favoriteitem';
+import LoginLogout from '../components/login-logout';
 
-export default function page() {
-    const [favoriteItems, setfavoriteItems] = useState<favoriteitem[]>([])
-    const usertoken = localStorage.getItem('usertoken')
-    
-;
-
+export default function FavoritesPage() {
+    const [favoriteItems, setFavoriteItems] = useState<favoriteitem[]>([]);
+    const userToken = localStorage.getItem('usertoken');
+  
     const getFavoriteItems = async () => {
-        try {
-            const response = await fetch('http://127.0.0.1:5000/get-favorite', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                setfavoriteItems(data);
-            } else {
-                console.error('Failed to fetch cart items');
-            }
-        } catch (error) {
-            console.error('An error occurred:', error);
+      try {
+        const response = await fetch('https://raysflaskeccomerce.onrender.com/get-favorite', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+  
+        if (response.ok) {
+          const data = await response.json();
+          setFavoriteItems(data);
+        } else {
+          console.error('Failed to fetch favorite items');
         }
-    }
-
-    const updateFavoriteItems = (itemId:number) => {
-        setfavoriteItems((prevFavoriteItems) => prevFavoriteItems.filter(item => item.id !== itemId));
+      } catch (error) {
+        console.error('An error occurred:', error);
       }
-
+    };
+  
+    const updateFavoriteItems = (itemId: number) => {
+      setFavoriteItems((prevFavoriteItems) => prevFavoriteItems.filter((item) => item.id !== itemId));
+    };
+  
     useEffect(() => {
-        getFavoriteItems();
-    }, [])
-  return (
-    <>
-    <Navbar/>
-    <div className='w-full h-[100vh] grid grid-cols-3 justify-center items-center'>
-    <div className='h-1/2 w-full flex flex-col col-span-2 justify-center items-center'>
-        {favoriteItems.map(product => (
-            product.usertoken === usertoken ?
-        <FavoriteItem key={product.id} favorite={product} updateFavoriteItem={updateFavoriteItems} />
-        : null 
-      ))}
-    </div>
-    </div>
-    </>
-  )
-}
+      getFavoriteItems();
+    }, []);
+  
+    return (
+        <>
+        <LoginLogout />
+        <Navbar />
+        <div className='w-full h-screen'>
+          <div className='container mx-auto p-8'>
+            <h1 className='text-3xl font-bold mb-8 ml-4'>Your Favorites</h1>
+  
+            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
+              {favoriteItems.length > 0 ? (
+                favoriteItems.map((product) =>
+                  product.usertoken === userToken ? (
+                    <FavoriteItem key={product.id} favorite={product} updateFavoriteItem={updateFavoriteItems} />
+                  ) : null
+                )
+              ) : (
+                <div className='text-xl text-gray-600 text-center'>
+                  You haven't added any items to your favorites yet.
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </>
+    );
+  }

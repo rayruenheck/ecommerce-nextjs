@@ -14,6 +14,7 @@ export interface productable {
 export interface cartitem {
     id: number
     image: string
+    product_id: number
     product_category: string
     product_name: string
     quantity: number
@@ -39,3 +40,4 @@ export interface favoriteable {
     favorite: favoriteitem
     updateFavoriteItem : (itemId:number) =>void
 }
+

@@ -14,7 +14,7 @@ export default function page() {
         
     
         
-          const response = await fetch('http://127.0.0.1:5000/verify-user', {
+          const response = await fetch('https://raysflaskeccomerce.onrender.com/verify-user', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

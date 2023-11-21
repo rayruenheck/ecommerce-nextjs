@@ -1,10 +1,16 @@
 "use client"
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 export default function Page() {
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const router = useRouter()
+
+  const handlePush = () => {
+    router.push('/login')
+  }
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault(); // Prevent the default form submission behavior
@@ -14,9 +20,9 @@ export default function Page() {
       username: username,
       password: password,
     };
-
     
-      const response = await fetch('http://127.0.0.1:5000/register-user', {
+    
+      const response = await fetch('https://raysflaskeccomerce.onrender.com/register-user', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -63,7 +69,7 @@ export default function Page() {
           name='password'
           placeholder='Password'
         />
-        <button className='border-2 w-[150px] rounded-md bg-blue-400' type='submit'>
+        <button onClick={handlePush} className='border-2 w-[150px] rounded-md bg-blue-400' type='submit'>
           Register
         </button>
       </form>
