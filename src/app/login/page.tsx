@@ -30,11 +30,8 @@ export default function LoginPage() {
         const loggedInUsername = data.username;
         localStorage.setItem('username', loggedInUsername);
   
-        const token = localStorage.getItem('access_token');
-        if (!token) {
-          alert('Please log in first.');
-          return;
-        }
+        
+       
   
         router.push(`/`);
       } else {
